@@ -1,3 +1,4 @@
 [package]
-version = 1.0.0
+description = Bro script library for getting the effective TLD of a domain.
+tags = dns, domain, name, library, tld
 script_dir = scripts
