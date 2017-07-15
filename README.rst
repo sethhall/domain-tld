@@ -13,7 +13,7 @@ Installation
 
 ::
 
-	bro-pkg install domain-tld
+	bro-pkg install sethhall/domain-tld
 
 API
 ---
