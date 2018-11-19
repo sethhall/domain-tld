@@ -85,7 +85,7 @@ function effective_domain(domain: string): string
 	local depth=2;
 	if ( effective_tlds_4th_level in domain )
 		depth=5;
-	if ( effective_tlds_3rd_level in domain )
+	else if ( effective_tlds_3rd_level in domain )
 		depth=4;
 	else if ( effective_tlds_2nd_level in domain )
 		depth=3;
