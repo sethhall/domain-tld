@@ -1,7 +1,7 @@
 ##! This module contains some convenience mechanisms for extracting TLDs
 ##! and domains from fully qualified domain names using data available
 ##! from Mozilla which can be found here:
-##!   http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1
+##!   https://publicsuffix.org/list/effective_tld_names.dat
 ##!
 ##! Author: Seth Hall <seth@icir.org>
 
@@ -41,6 +41,7 @@ export {
 const effective_tlds_1st_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_tlds_2nd_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_tlds_3rd_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
+const effective_tlds_4th_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 
 const effective_tld_pattern: pattern    = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_domain_pattern: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
@@ -53,6 +54,7 @@ const tld_extraction_suffixes: table[count] of pattern = {
 	[3] = /\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[4] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[5] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
+	[6] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]\.[^\.]+$/,
 };
 
 function zone_by_depth(domain: string, depth: count): string
@@ -69,7 +71,9 @@ function zone_by_depth(domain: string, depth: count): string
 function effective_tld(domain: string): string
 	{
 	local depth=1;
-	if ( effective_tlds_3rd_level in domain )
+	if ( effective_tlds_4th_level in domain )
+		depth=4;
+	else if ( effective_tlds_3rd_level in domain )
 		depth=3;
 	else if ( effective_tlds_2nd_level in domain )
 		depth=2;
@@ -79,7 +83,9 @@ function effective_tld(domain: string): string
 function effective_domain(domain: string): string
 	{
 	local depth=2;
-	if ( effective_tlds_3rd_level in domain )
+	if ( effective_tlds_4th_level in domain )
+		depth=5;
+	else if ( effective_tlds_3rd_level in domain )
 		depth=4;
 	else if ( effective_tlds_2nd_level in domain )
 		depth=3;
