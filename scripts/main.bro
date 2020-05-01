@@ -27,7 +27,32 @@ export {
 	## 
 	## Returns: The "effective domain" string.
 	global effective_domain: function(domain: string): string;
-	
+
+	## This function uses a built in list of "effective" TLDs pulled from 
+	## the list that Mozilla maintains to take any arbitrary domain and 
+	## find the "effective subdomain" (i.e. one component beyond the 
+	## "effective TLD").  For example, "x.y.z.google.co.uk" is turned
+	## into "z.google.co.uk".
+	##
+	## domain: The FQDN to find the effective domain within.
+	## 
+	## Returns: The "effective subdomain" string.
+	global effective_subdomain: function(domain: string): string;
+
+	type EffectiveNames: record {
+		tld: string &optional;
+		domain: string &optional;
+		subdomain: string &optional;
+	};
+
+	## Return a record with the full set of "tld", "domain", "subdomain" in
+	## one fuction call.
+	##
+	## domain: The FQDN to find the effective domain within.
+	## 
+	## Returns: An "EffectiveNames" record.
+	global effective_names: function(domain: string): EffectiveNames;
+
 	## This function can strip domain portions from domain names efficiently.
 	##
 	## domain: The domain to strip domain portions from.
@@ -65,6 +90,7 @@ function zone_by_depth(domain: string, depth: count): string
 	local result = find_last(domain, tld_extraction_suffixes[depth]);
 	if ( result == "" )
 		return domain;
+
 	return result[1:];
 	}
 
@@ -91,7 +117,28 @@ function effective_domain(domain: string): string
 		depth=3;
 	return zone_by_depth(domain, depth);
 	}
-	
+
+function effective_subdomain(domain: string): string
+	{
+	local depth=3;
+	if ( effective_tlds_4th_level in domain )
+		depth=6;
+	else if ( effective_tlds_3rd_level in domain )
+		depth=5;
+	else if ( effective_tlds_2nd_level in domain )
+		depth=4;
+	return zone_by_depth(domain, depth);
+	}
+
+
+function effective_names(domain: string): EffectiveNames
+	{
+	return EffectiveNames($tld = effective_tld(domain),
+	                      $domain = effective_domain(domain),
+	                      $subdomain = effective_subdomain(domain));
+	}
+
+
 #event bro_init()
 #	{
 #	local domains = vector("blah.www.google.com", "www.google.co.uk", "www.easa.eu.int");
