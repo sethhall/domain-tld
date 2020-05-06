@@ -118,16 +118,25 @@ function effective_domain(domain: string): string
 	return zone_by_depth(domain, depth);
 	}
 
+# effective_subdomain uses the same depth as effective_domain, then uses the
+# pattern to remove the domain from the query, leaving the subdomain portion.
+# If there is no subdomain, it will return an empty string.
 function effective_subdomain(domain: string): string
 	{
-	local depth=3;
+	local depth=2;
 	if ( effective_tlds_4th_level in domain )
-		depth=6;
-	else if ( effective_tlds_3rd_level in domain )
 		depth=5;
-	else if ( effective_tlds_2nd_level in domain )
+	else if ( effective_tlds_3rd_level in domain )
 		depth=4;
-	return zone_by_depth(domain, depth);
+	else if ( effective_tlds_2nd_level in domain )
+		depth=3;
+	local sub_domain = sub(domain, tld_extraction_suffixes[depth], "");
+	# The default behavior for sub() will return the full query if there is no subdomain.
+	# If there is no subdomain, it should return an empty string.
+	if ( sub_domain == domain )
+		return "";
+	else
+		return sub_domain;
 	}
 
 
