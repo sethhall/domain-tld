@@ -43,6 +43,7 @@ export {
 		tld: string &optional;
 		domain: string &optional;
 		subdomain: string &optional;
+		valid_tld: bool &optional;
 	};
 
 	## Return a record with the full set of "tld", "domain", "subdomain" in
@@ -149,7 +150,8 @@ function effective_names(domain: string): EffectiveNames
 	{
 	return EffectiveNames($tld = effective_tld(domain),
 	                      $domain = effective_domain(domain),
-	                      $subdomain = effective_subdomain(domain));
+	                      $subdomain = effective_subdomain(domain),
+	                      $valid_tld = valid_tld(domain));
 	}
 
 
