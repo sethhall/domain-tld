@@ -23,7 +23,7 @@ STDIN.each_line do |line|
   end
 
   next if line =~ /^$|^\/\/|^!/
-  #next if line =~ /[\x80-\xff]/
+  next if not line.ascii_only?
   line.strip!
   line.gsub!(/\./, "\\.")
 
