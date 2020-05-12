@@ -94,6 +94,20 @@ function zone_by_depth(domain: string, depth: count): string
 	return result[1:];
 	}
 
+function valid_tld(domain: string): bool
+	{
+	local depth=0;
+	if ( effective_tlds_4th_level in domain )
+		depth=4;
+	else if ( effective_tlds_3rd_level in domain )
+		depth=3;
+	else if ( effective_tlds_2nd_level in domain )
+		depth=2;
+	else if ( effective_tlds_1st_level in domain )
+		depth=1;
+	return depth != 0;
+	}
+
 function effective_tld(domain: string): string
 	{
 	local depth=1;
