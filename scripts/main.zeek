@@ -67,6 +67,7 @@ const effective_tlds_1st_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_tlds_2nd_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_tlds_3rd_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_tlds_4th_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
+const effective_tlds_5th_level: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
 
 const effective_tld_pattern: pattern    = /DEFINED_IN_SEPARATE_FILE/ &redef;
 const effective_domain_pattern: pattern = /DEFINED_IN_SEPARATE_FILE/ &redef;
@@ -79,7 +80,8 @@ const tld_extraction_suffixes: table[count] of pattern = {
 	[3] = /\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[4] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[5] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
-	[6] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]\.[^\.]+$/,
+	[6] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
+	[7] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 };
 
 function zone_by_depth(domain: string, depth: count): string
@@ -97,7 +99,9 @@ function zone_by_depth(domain: string, depth: count): string
 function effective_tld(domain: string): string
 	{
 	local depth=1;
-	if ( effective_tlds_4th_level in domain )
+	if ( effective_tlds_5th_level in domain )
+		depth=5;
+	else if ( effective_tlds_4th_level in domain )
 		depth=4;
 	else if ( effective_tlds_3rd_level in domain )
 		depth=3;
@@ -109,7 +113,9 @@ function effective_tld(domain: string): string
 function effective_domain(domain: string): string
 	{
 	local depth=2;
-	if ( effective_tlds_4th_level in domain )
+	if ( effective_tlds_5th_level in domain )
+		depth=6;
+	else if ( effective_tlds_4th_level in domain )
 		depth=5;
 	else if ( effective_tlds_3rd_level in domain )
 		depth=4;
@@ -121,7 +127,9 @@ function effective_domain(domain: string): string
 function effective_subdomain(domain: string): string
 	{
 	local depth=3;
-	if ( effective_tlds_4th_level in domain )
+	if ( effective_tlds_5th_level in domain )
+		depth=7;
+	else if ( effective_tlds_4th_level in domain )
 		depth=6;
 	else if ( effective_tlds_3rd_level in domain )
 		depth=5;
