@@ -1,2 +1,2 @@
-@load ./main
 @load ./tld-data
+@load ./main
