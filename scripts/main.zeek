@@ -76,6 +76,7 @@ const tld_extraction_suffixes: table[count] of pattern = {
 	[5] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[6] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 	[7] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
+	[8] = /\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+\.[^\.]+$/,
 };
 
 function zone_by_depth(domain: string, depth: count): string
@@ -93,7 +94,9 @@ function zone_by_depth(domain: string, depth: count): string
 function effective_tld(domain: string): string
 	{
 	local depth=1;
-	if ( effective_tlds_5th_level in domain )
+	if ( effective_tlds_6th_level in domain )
+		depth=6;
+	else if ( effective_tlds_5th_level in domain )
 		depth=5;
 	else if ( effective_tlds_4th_level in domain )
 		depth=4;
@@ -107,7 +110,9 @@ function effective_tld(domain: string): string
 function effective_domain(domain: string): string
 	{
 	local depth=2;
-	if ( effective_tlds_5th_level in domain )
+	if ( effective_tlds_6th_level in domain )
+		depth=7;
+	else if ( effective_tlds_5th_level in domain )
 		depth=6;
 	else if ( effective_tlds_4th_level in domain )
 		depth=5;
@@ -121,7 +126,9 @@ function effective_domain(domain: string): string
 function effective_subdomain(domain: string): string
 	{
 	local depth=3;
-	if ( effective_tlds_5th_level in domain )
+	if ( effective_tlds_6th_level in domain )
+		depth=8;
+	else if ( effective_tlds_5th_level in domain )
 		depth=7;
 	else if ( effective_tlds_4th_level in domain )
 		depth=6;
